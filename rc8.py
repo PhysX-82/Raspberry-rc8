@@ -28,10 +28,10 @@ class rc8():
       sleep( 1 )
       self._robot.setDirection( -1*dirOffset )
       sleep( 3 )
-      self._robot.setDirectione( 0 )
+      self._robot.setDirection( 0 )
       sleep( 1 )
 
-      loopcount = loopcount +1
+      loopCount = loopCount +1
 
 if __name__ == "__main__":
   robot = mockRobot()
