@@ -30,9 +30,9 @@ class raspRobot():
       GPIO.setmode(GPIO.BCM)
 
       # set pin for output
-      GPIO.setup( params.dir_a, GPIO.OUT )
-      GPIO.setup( params.dir_b, GPIO.OUT )
-      GPIO.setup( params.pwm, GPIO.OUT )
+      GPIO.setup( params["dir_A"], GPIO.OUT )
+      GPIO.setup( params["dir_B"], GPIO.OUT )
+      GPIO.setup( params["pwma"], GPIO.OUT )
       motor = GPIO.PWM( params["pwm"], params["freq"] )
 
       return motor
@@ -71,4 +71,4 @@ if __name__ == "__main__":
 
   robot = raspRobot( params )
   rc = rc8( robot )
-  rc.runLoop( 10 )
+rc.runLoop( 10 )
