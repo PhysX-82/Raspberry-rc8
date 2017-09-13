@@ -2,43 +2,12 @@ from time import sleep
 import RPi.GPIO as GPIO
 import yaml
 
-with open("config.yaml", 'r') as stream:
-    try:
-        print(yaml.load(stream))
-    except yaml.YAMLError as exc:
-        print(exc)
+class raspRobot():
+  def __init__( self, params ):
+    self._motor_A = self._setupMotorGpio( params['motorA'] )
+    self._motor_B = self._setupMotorGpio( params['motorB'] )
 
-def setupMotorGpio( params ):
-    ''' Sets parameters for the IOs
-
-        params: an object with the following properties
-        params.pin_dir_a: motor direction pin A
-        params.pin_dir_b: motor direction pin b
-        params.pin_pwma: pin to output PWM signals to (for speed)
-        params.freq: frequency for PWM signal
-        params: an object with the following properties
-        params.pin_dir_B: motor direction pin A
-        params.pin_dir_A: motor direction pin b
-        params.pin_pwmb: pin to output PWM signals to (for speed)
-        params.freq: frequency for PWM signal
-
-        returns the motor object
-    '''
-
-    # set the pin numbering scheme
-    GPIO.setmode(GPIO.BCM)
-
-    # set pin for output
-    GPIO.setup( params.pin_dir_a, GPIO.OUT )
-    GPIO.setup( params.pin_dir_a, GPIO.OUT )
-    GPIO.setup( params.pin_pwma, GPIO.OUT )
-    GPIO.setup( params.pin_dir_A, GPIO.OUT )
-    GPIO.setup( params.pin_dir_B, GPIO.OUT )
-    GPIO.setup( params.pin_pwmb, GPIO.OUT )
-
-    return motor
-
-class mockRobot():
+    
   def setSpeed( self, speed ):
     print "speed", speed
     return
@@ -46,6 +15,27 @@ class mockRobot():
   def setDirection( self, speedOffset):
     print "new direction:", speedOffset
     return
+
+  def _setupMotorGpio( self, params ):
+      ''' Sets parameters for the IOs
+          params: an object with the following properties
+          params.dir_a: motor direction pin A
+          params.dir_b: motor direction pin b
+          params.pwm: pin to output PWM signals to (for speed)
+          params.freq: frequency for PWM signal
+          returns the motor object
+      '''
+
+      # set the pin numbering scheme
+      GPIO.setmode(GPIO.BCM)
+
+      # set pin for output
+      GPIO.setup( params.dir_a, GPIO.OUT )
+      GPIO.setup( params.dir_b, GPIO.OUT )
+      GPIO.setup( params.pwm, GPIO.OUT )
+      motor = GPIO.PWM( params["pwm"], params["freq"] )
+
+      return motor
 
 class rc8():
   def __init__( self, robot ):
@@ -72,6 +62,13 @@ class rc8():
       loopCount = loopCount +1
 
 if __name__ == "__main__":
-  robot = mockRobot()
+  with open("config.yaml", 'r') as stream:
+    try:
+        params = yaml.load(stream)
+    except yaml.YAMLError as exc:
+        print(exc)
+
+
+  robot = raspRobot( params )
   rc = rc8( robot )
-rc.runLoop( 10 )
+  rc.runLoop( 10 )
