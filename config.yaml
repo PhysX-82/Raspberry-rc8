@@ -1,0 +1,8 @@
+motorA:
+  dir_A: 2
+  dir_B: 4
+  pwma: 17
+motorB:
+  dir_a: 21
+  dir_b: 16
+  pwmb: 12
