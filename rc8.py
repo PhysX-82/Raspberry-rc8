@@ -19,8 +19,8 @@ class raspRobot():
   def _setupMotorGpio( self, params ):
       ''' Sets parameters for the IOs
           params: an object with the following properties
-          params.dir_a: motor direction pin A
-          params.dir_b: motor direction pin b
+          params.dir_A: motor direction pin A
+          params.dir_B: motor direction pin b
           params.pwm: pin to output PWM signals to (for speed)
           params.freq: frequency for PWM signal
           returns the motor object
@@ -32,7 +32,7 @@ class raspRobot():
       # set pin for output
       GPIO.setup( params["dir_A"], GPIO.OUT )
       GPIO.setup( params["dir_B"], GPIO.OUT )
-      GPIO.setup( params["pwma"], GPIO.OUT )
+      GPIO.setup( params["pwm"], GPIO.OUT )
       motor = GPIO.PWM( params["pwm"], params["freq"] )
 
       return motor
