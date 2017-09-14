@@ -3,6 +3,13 @@ import RPi.GPIO as GPIO
 import yaml
 
 class raspRobot():
+
+  def setMotorDirection(self, direction, pin_dir_A, pin_dir_B ):
+    ''' sets the IO pins to control motor direction
+    '''
+    GPIO.output( pin_dir_A, direction[0])
+    GPIO.output( pin_dir_B, direction[1])
+
   def __init__( self, params ):
     self._motor_A = self._setupMotorGpio( params['motorA'] )
     self._motor_B = self._setupMotorGpio( params['motorB'] )
@@ -38,12 +45,13 @@ class raspRobot():
 
       # set the pin numbering scheme
       GPIO.setmode(GPIO.BCM)
-
       # set pin for output
       GPIO.setup( params["dir_A"], GPIO.OUT )
       GPIO.setup( params["dir_B"], GPIO.OUT )
       GPIO.setup( params["pwm"], GPIO.OUT )
       motor = GPIO.PWM( params["pwm"], params["freq"] )
+
+      self.setMotorDirection( (0,1), params['dir_A'], params['dir_B'] )
 
       return motor
 
@@ -55,19 +63,19 @@ class rc8():
     loopCount = 0
 
     speed = 50
-    dirOffset = 20
+    dirOffset = 30
 
     self._robot.setSpeed( 50 )
 
     while( loopCount < count ):
       self._robot.setDirection( dirOffset )
-      sleep( 3 )
-      self._robot.setDirection( 0 )
       sleep( 1 )
+      self._robot.setDirection( 0 )
+      sleep( 2 )
       self._robot.setDirection( -1*dirOffset )
-      sleep( 3 )
-      self._robot.setDirection( 0 )
       sleep( 1 )
+      self._robot.setDirection( 0 )
+      sleep( 2 )
 
       loopCount = loopCount +1
 
@@ -80,8 +88,5 @@ if __name__ == "__main__":
 
 
   robot = raspRobot( params )
-  robot.setSpeed(50)
-  robot.setDirection(20)
-  sleep (5)
-#  rc = rc8( robot )
-#rc.runLoop( 10 )
+  rc = rc8( robot )
+rc.runLoop( 10 )
