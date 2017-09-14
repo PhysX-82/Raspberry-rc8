@@ -7,13 +7,17 @@ class raspRobot():
     self._motor_A = self._setupMotorGpio( params['motorA'] )
     self._motor_B = self._setupMotorGpio( params['motorB'] )
 
-    
+
   def setSpeed( self, speed ):
     print "speed", speed
+    self._motor_A.start(speed)
+    self._motor_B.start(speed)
     return
 
   def setDirection( self, speedOffset):
     print "new direction:", speedOffset
+    self._motor_A.start(speedOffset)
+    self._motor_B.start(speedOffset)
     return
 
   def _setupMotorGpio( self, params ):
@@ -51,7 +55,7 @@ class rc8():
 
     while( loopCount < count ):
       self._robot.setDirection( dirOffset )
-      sleep( 5 )
+      sleep( 3 )
       self._robot.setDirection( 0 )
       sleep( 1 )
       self._robot.setDirection( -1*dirOffset )
