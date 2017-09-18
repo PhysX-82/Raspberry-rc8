@@ -79,14 +79,18 @@ class rc8():
 
       loopCount = loopCount +1
 
-if __name__ == "__main__":
+def readConfig( filename ):
   with open("config.yaml", 'r') as stream:
     try:
         params = yaml.load(stream)
     except yaml.YAMLError as exc:
         print(exc)
 
+    return params
+
+if __name__ == "__main__":
+  params = readConfig('config.yaml')
 
   robot = raspRobot( params )
   rc = rc8( robot )
-rc.runLoop( 10 )
+  rc.runLoop( 10 )
